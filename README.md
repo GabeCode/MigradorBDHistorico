@@ -11,3 +11,6 @@ Contaremos con un archivo <b>config.properties</b> que contendrá los datos de l
 Luego esta el archivo <b>script.txt</b> donde estaran las consultas donde el where tiene que ser un campo que almacene el año que se 
 insertó el registro y los insert respectivos a cada tabla.
 
+<h2>Archivos Necesario</h2>
+Los archivos necesarios estan en la carpeta migración, dentro de este proyecto.
+
