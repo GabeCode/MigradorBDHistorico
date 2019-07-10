@@ -7,11 +7,8 @@ package MigradorBa;
 
 import BusinessLogic.AppLog;
 import BusinessLogic.ExecuteQuerys;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -44,7 +41,7 @@ public class MigradorBa {
                         executeQuerys.start();
                     } else if (year.length() != 4) {
                         System.out.println("Ingresar año valido");
-                    } else if (year2 < 2013) {
+                    } else if (year2 < 2000) {
                         System.out.println("Ingresar año mayor a 2000");
                     } else if (year2 > anActual.get(Calendar.YEAR)) {
                         System.out.println("Ingresar año menor o igual al actual");
