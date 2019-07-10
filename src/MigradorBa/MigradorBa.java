@@ -45,7 +45,7 @@ public class MigradorBa {
                     } else if (year.length() != 4) {
                         System.out.println("Ingresar año valido");
                     } else if (year2 < 2013) {
-                        System.out.println("Ingresar año mayor a 2010");
+                        System.out.println("Ingresar año mayor a 2000");
                     } else if (year2 > anActual.get(Calendar.YEAR)) {
                         System.out.println("Ingresar año menor o igual al actual");
                     }
