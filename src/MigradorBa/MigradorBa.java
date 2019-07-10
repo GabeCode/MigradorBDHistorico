@@ -38,7 +38,7 @@ public class MigradorBa {
             try {
                 if (!year.equals("")) {
                     int year2 = Integer.parseInt(year);
-                    if (year.length() == 4 & year2 > 2010 & year2 <= anActual.get(Calendar.YEAR)) {
+                    if (year.length() == 4 & year2 > 2000 & year2 <= anActual.get(Calendar.YEAR)) {
                         System.out.println("Migrando datos......");
                         executeQuerys = new ExecuteQuerys(year);
                         executeQuerys.start();
