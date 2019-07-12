@@ -8,7 +8,6 @@ package BusinessLogic;
 import Connection.ConnectionMySqlDestination;
 import Connection.ConnectionMySqlOrigin;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -76,7 +75,8 @@ public class ExecuteQuerys extends Thread {
                                 if (rs.getMetaData().getColumnClassName(k).contains("String")) {
                                     stmDestin.setString(k, rs.getString(k));
                                 } else if (rs.getMetaData().getColumnClassName(k).contains("BigDecimal")) {
-                                    stmDestin.setBigDecimal(k, new BigDecimal(rs.getString(k)));
+                                    val1 = BigDecimal.valueOf(Double.parseDouble(rs.getString(k)));
+                                    stmDestin.setBigDecimal(k, val1);
                                 }
                             }
                             stmDestin.addBatch();
