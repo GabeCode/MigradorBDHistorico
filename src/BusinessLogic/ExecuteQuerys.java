@@ -71,7 +71,7 @@ public class ExecuteQuerys extends Thread {
 
                         while (rs.next()) {
                             int columnas = rs.getMetaData().getColumnCount();
-
+                            
                             for (int k = 1; k <= columnas; k++) {
                                 if (rs.getMetaData().getColumnClassName(k).contains("String")) {
                                     stmDestin.setString(k, rs.getString(k));
@@ -85,11 +85,12 @@ public class ExecuteQuerys extends Thread {
                             rsData++;
                             
                             if(rsData%10000 == 0){
-                                stmDestin.executeBatch();
+                                stmDestin.executeUpdate();
                                 rsData = 0;
                                 sleep(100);
                             }
                         }
+                        rs.close();
                         rsData=0;
                         rs = null;
                         System.gc();
