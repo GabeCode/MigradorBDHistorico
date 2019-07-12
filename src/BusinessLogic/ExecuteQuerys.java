@@ -66,6 +66,7 @@ public class ExecuteQuerys extends Thread {
                         log.escribirLog("Sentencia SQL Ejecutada: " + queryStrings[j], false);
                         log.escribirLog("Parametro: 1 = " + countYears, false);
                         insertados = 0;
+                        int rsData = 0;
                         stmDestin = connectionDestination.getConnection().prepareStatement(queryStrings[j + 1]);
 
                         while (rs.next()) {
@@ -81,10 +82,21 @@ public class ExecuteQuerys extends Thread {
                             }
                             stmDestin.addBatch();
                             insertados++;
+                            rsData++;
+                            
+                            if(rsData%10000 == 0){
+                                stmDestin.executeBatch();
+                                rsData = 0;
+                                sleep(100);
+                            }
                         }
+                        rsData=0;
+                        rs = null;
+                        System.gc();
                         log.escribirLog("Inicio de INSERTs ....", false);
                         stmDestin.executeBatch();
                         log.escribirLog("Fin de INSERTs .... ", false);
+                        stmDestin = null;
                         log.escribirLog("Registros insertados: " + insertados , false);
                         totalDatos += insertados;
                     }
@@ -105,6 +117,16 @@ public class ExecuteQuerys extends Thread {
             log.escribirLog("Error: " + ex , true);
             Logger.getLogger(ExecuteQuerys.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(0);
+        } catch (InterruptedException ex) {
+            System.out.println("Error: " + ex);
+            Logger.getLogger(ExecuteQuerys.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try {
+                connectionOrigin.desconectar();
+                connectionDestination.desconectar();
+            } catch (SQLException ex) {
+                Logger.getLogger(ExecuteQuerys.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
