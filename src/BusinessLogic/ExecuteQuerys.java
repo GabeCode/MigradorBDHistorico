@@ -52,7 +52,7 @@ public class ExecuteQuerys extends Thread {
                 System.out.println("Conexion nula");
             } else {
                 for (int i = 0; i <= cantYears; i++) {
-                    for (int j = 0; queryStrings[j] != null; j += 2) {
+                    for (int j=0; queryStrings[j] != null; j++) {
                         stmOrigin = connectionOrigin.getConnection().prepareStatement(queryStrings[j]);
                         log.escribirLog("Preparando SQL: " + queryStrings[j], false);
                         stmOrigin.setInt(1, countYears);
