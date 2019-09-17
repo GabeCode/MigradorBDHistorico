@@ -5,13 +5,10 @@
  */
 package BusinessLogic;
 
-import Connection.ConnectionMySqlDestination;
 import Connection.ConnectionMySqlOrigin;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -28,10 +25,7 @@ public class ExecuteQuerys extends Thread {
     AppLog log;
     //Variables para conexion a las Bases de Datos
     private ConnectionMySqlOrigin connectionOrigin = null;
-    private ConnectionMySqlDestination connectionDestination = null;
     private PreparedStatement stmOrigin;
-    private PreparedStatement stmDestin;
-    private ResultSet rs;
     private String[] queryStrings;
     private int cantYears, yearReceived, countYears, insertados, totalDatos;
     private String yearString;
@@ -50,7 +44,6 @@ public class ExecuteQuerys extends Thread {
             log = new AppLog();
             getQuerys();
             connectionOrigin = new ConnectionMySqlOrigin();
-            connectionDestination = new ConnectionMySqlDestination();
             yearReceived = Integer.parseInt(year);
             cantYears = getCantYears(yearReceived);
             countYears = yearReceived;
@@ -59,34 +52,16 @@ public class ExecuteQuerys extends Thread {
                 System.out.println("Conexion nula");
             } else {
                 for (int i = 0; i <= cantYears; i++) {
-                    for (int j = 0; queryStrings[j] != null; j += 2) {
+                    for (int j=0; queryStrings[j] != null; j++) {
                         stmOrigin = connectionOrigin.getConnection().prepareStatement(queryStrings[j]);
                         log.escribirLog("Preparando SQL: " + queryStrings[j], false);
                         stmOrigin.setInt(1, countYears);
-                        rs = stmOrigin.executeQuery();
-                        log.escribirLog("Sentencia SQL Ejecutada: " + queryStrings[j], false);
-                        log.escribirLog("Parametro: 1 = " + countYears, false);
-                        insertados = 0;
-                        stmDestin = connectionDestination.getConnection().prepareStatement(queryStrings[j + 1]);
-
-                        while (rs.next()) {
-                            int columnas = rs.getMetaData().getColumnCount();
-
-                            for (int k = 1; k <= columnas; k++) {
-                                if (rs.getMetaData().getColumnClassName(k).contains("String")) {
-                                    stmDestin.setString(k, rs.getString(k));
-                                } else if (rs.getMetaData().getColumnClassName(k).contains("BigDecimal")) {
-                                    stmDestin.setBigDecimal(k, new BigDecimal(rs.getString(k)));
-                                }
-                            }
-                            stmDestin.addBatch();
-                            insertados++;
-                        }
-                        log.escribirLog("Inicio de INSERTs ....", false);
-                        stmDestin.executeBatch();
-                        log.escribirLog("Fin de INSERTs .... ", false);
+                        log.escribirLog("Parametro: 1 = " + countYears, false); 
+                        insertados = stmOrigin.executeUpdate();
+                        log.escribirLog("Sentencia SQL Ejecutada: " + queryStrings[j], false);           
                         log.escribirLog("Registros insertados: " + insertados , false);
                         totalDatos += insertados;
+                        insertados=0;
                     }
                     countYears++;
                 }
@@ -105,6 +80,12 @@ public class ExecuteQuerys extends Thread {
             log.escribirLog("Error: " + ex , true);
             Logger.getLogger(ExecuteQuerys.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(0);
+        }finally{
+            try {
+                connectionOrigin.desconectar();
+            } catch (SQLException ex) {
+                Logger.getLogger(ExecuteQuerys.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
