@@ -16,7 +16,6 @@ import java.util.Properties;
 /**
  *
  * @author Gabriel Abrego
- * @author Rafael Belloso
  * 
  */
 public class ConnectionMySqlOrigin {
