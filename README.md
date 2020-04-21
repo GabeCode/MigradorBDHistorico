@@ -1,4 +1,4 @@
-# MigradorBDHistorico v1.0
+# MigradorBDHistorico💾📆
 Migración de data historica de un Schema a otro en MySQL, estando conectados en el mismo servidor. 
 
 # <h2>Comenzando🚀</h2>
